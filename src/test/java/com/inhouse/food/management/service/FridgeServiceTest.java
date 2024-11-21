@@ -1,16 +1,15 @@
 package com.inhouse.food.management.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import com.inhouse.food.management.model.FoodStorage;
 import com.inhouse.food.management.model.Grocery;
-import org.junit.jupiter.api.Test;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.Test;
 
 public class FridgeServiceTest {
 
@@ -59,7 +58,8 @@ public class FridgeServiceTest {
         FridgeService fridgeService = new FridgeService(mockFoodStorage, mockGroceryService);
 
         Grocery grocery = new Grocery("Banana", 10, "kg", 1.5, LocalDate.now().plusDays(7));
-        when(mockGroceryService.areGroceriesClubbable(any(Grocery.class), eq(grocery))).thenReturn(true);
+        when(mockGroceryService.areGroceriesClubbable(any(Grocery.class), eq(grocery)))
+                .thenReturn(true);
 
         fridgeService.addGrocery(grocery);
 
@@ -125,11 +125,19 @@ public class FridgeServiceTest {
         FridgeService fridgeService = new FridgeService(mockFoodStorage, mockGroceryService);
 
         Grocery grocery = new Grocery("Banana", 10, "kg", 1.5, LocalDate.now().plusDays(7));
-        when(mockFoodStorage.getGroceriesPerCategory()).thenReturn(new HashMap<>() {{
-            put("Banana", new ArrayList<>() {{
-                add(grocery);
-            }});
-        }});
+        when(mockFoodStorage.getGroceriesPerCategory())
+                .thenReturn(
+                        new HashMap<>() {
+                            {
+                                put(
+                                        "Banana",
+                                        new ArrayList<>() {
+                                            {
+                                                add(grocery);
+                                            }
+                                        });
+                            }
+                        });
 
         fridgeService.removeGrocery("Banana", 5);
 

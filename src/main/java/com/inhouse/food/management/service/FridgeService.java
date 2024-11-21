@@ -2,13 +2,9 @@ package com.inhouse.food.management.service;
 
 import com.inhouse.food.management.model.FoodStorage;
 import com.inhouse.food.management.model.Grocery;
-
 import java.util.*;
 
-/**
- * Service class for managing groceries and food storage in a fridge.
- */
-
+/** Service class for managing groceries and food storage in a fridge. */
 public class FridgeService {
     private FoodStorage foodStorage;
 
@@ -26,28 +22,40 @@ public class FridgeService {
 
     /**
      * Adds a grocery item to the food storage. If the same grocery item added multiple times then
-     * records would clubbed to an existing one based on expiry date,
-     * their quantities are combined.
-     * In case where expiry dates are different the groceries even if falls under same category would be treated
-     * differently and hence there quatities won't be clubbed
+     * records would clubbed to an existing one based on expiry date, their quantities are combined.
+     * In case where expiry dates are different the groceries even if falls under same category
+     * would be treated differently and hence there quatities won't be clubbed
      *
      * @param grocery the grocery item to be added
      */
     public void addGrocery(Grocery grocery) {
         ArrayList<Grocery> groceryToBeAdded = new ArrayList<>();
         groceryToBeAdded.add(grocery);
-        foodStorage.getGroceriesPerCategory().merge(grocery.getName(), groceryToBeAdded, (existing, newGrocery) -> {
-            Optional<Grocery> existingGrocery = existing.stream()
-                    .filter(g -> groceryService.areGroceriesClubbable(g, grocery))
-                    .findFirst();
+        foodStorage
+                .getGroceriesPerCategory()
+                .merge(
+                        grocery.getName(),
+                        groceryToBeAdded,
+                        (existing, newGrocery) -> {
+                            Optional<Grocery> existingGrocery =
+                                    existing.stream()
+                                            .filter(
+                                                    g ->
+                                                            groceryService.areGroceriesClubbable(
+                                                                    g, grocery))
+                                            .findFirst();
 
-            if (existingGrocery.isPresent()) {
-                existingGrocery.get().setQuantity(existingGrocery.get().getQuantity() + grocery.getQuantity());
-            } else {
-                existing.addAll(newGrocery);
-            }
-            return existing;
-        });
+                            if (existingGrocery.isPresent()) {
+                                existingGrocery
+                                        .get()
+                                        .setQuantity(
+                                                existingGrocery.get().getQuantity()
+                                                        + grocery.getQuantity());
+                            } else {
+                                existing.addAll(newGrocery);
+                            }
+                            return existing;
+                        });
     }
 
     /**
@@ -62,7 +70,8 @@ public class FridgeService {
         if (groceries == null) return false;
 
         // Calculate total quantity of the groceries
-        double totalQuantity = groceries.stream().map(Grocery::getQuantity).reduce(0.0, Double::sum);
+        double totalQuantity =
+                groceries.stream().map(Grocery::getQuantity).reduce(0.0, Double::sum);
         if (totalQuantity < quantity) return false;
 
         // Remove the specified quantity
@@ -87,12 +96,16 @@ public class FridgeService {
     }
 
     /**
-     * Retrieves all groceries stored in the storage.
-     * Expired groceries also gets retrieved to give an overview of the storage
+     * Retrieves all groceries stored in the storage. Expired groceries also gets retrieved to give
+     * an overview of the storage
+     *
      * @return a list of all grocery items in the food storage
      */
     public List<Grocery> getAllGroceries() {
-        return new ArrayList<>(foodStorage.getGroceriesPerCategory().values().stream().flatMap(Collection::stream).toList());
+        return new ArrayList<>(
+                foodStorage.getGroceriesPerCategory().values().stream()
+                        .flatMap(Collection::stream)
+                        .toList());
     }
 
     /**
@@ -101,7 +114,10 @@ public class FridgeService {
      * @return a list of expired grocery items
      */
     public List<Grocery> getExpiredGroceries() {
-        return foodStorage.getGroceriesPerCategory().values().stream().flatMap(Collection::stream).filter(groceryService::isExpired).toList();
+        return foodStorage.getGroceriesPerCategory().values().stream()
+                .flatMap(Collection::stream)
+                .filter(groceryService::isExpired)
+                .toList();
     }
 
     /**
@@ -110,6 +126,9 @@ public class FridgeService {
      * @return the total value of all grocery items
      */
     public double calculateTotalValue() {
-        return foodStorage.getGroceriesPerCategory().values().stream().flatMap(Collection::stream).mapToDouble(groceryService::calculateValue).sum();
+        return foodStorage.getGroceriesPerCategory().values().stream()
+                .flatMap(Collection::stream)
+                .mapToDouble(groceryService::calculateValue)
+                .sum();
     }
 }

@@ -1,49 +1,53 @@
 package com.inhouse.food.management.service;
 
+import static com.inhouse.food.management.FoodWasteApp.*;
+
 import com.inhouse.food.management.model.Grocery;
 import com.inhouse.food.management.model.Recipe;
-
 import java.time.LocalDate;
 import java.util.*;
-
-import static com.inhouse.food.management.FoodWasteApp.*;
 
 public class UserInterfaceService {
 
     /**
      * Initialize the application with sample groceries and recipes.
      *
-     * <p>This method adds sample grocery items to the fridge and sample recipes to the recipe book.</p>
+     * <p>This method adds sample grocery items to the fridge and sample recipes to the recipe book.
      *
-     * <p>Example usage:</p>
-     * <pre>
-     * {@code
+     * <p>Example usage:
+     *
+     * <pre>{@code
      * FoodWasteApp.init();
-     * }
-     * </pre>
+     * }</pre>
      */
     public static void init() {
         // Add some sample groceries to the fridge
         fridgeService.addGrocery(new Grocery("Milk", 2, "liters", 15, LocalDate.now().plusDays(5)));
-        fridgeService.addGrocery(new Grocery("Eggs", 12, "pieces", 2, LocalDate.now().plusDays(10)));
+        fridgeService.addGrocery(
+                new Grocery("Eggs", 12, "pieces", 2, LocalDate.now().plusDays(10)));
         fridgeService.addGrocery(new Grocery("Flour", 1, "kg", 20, LocalDate.now().plusMonths(6)));
 
         // Add some sample recipes to the cookbook
         Map<String, Double> pancakeIngredients = Map.of("Milk", 1.5, "Eggs", 2.0, "Flour", 0.5);
-        recipeService.addRecipe(new Recipe("Pancakes", "Delicious breakfast", "Mix and cook on a skillet.", pancakeIngredients, 4));
+        recipeService.addRecipe(
+                new Recipe(
+                        "Pancakes",
+                        "Delicious breakfast",
+                        "Mix and cook on a skillet.",
+                        pancakeIngredients,
+                        4));
     }
 
     /**
      * Start the console menu for user interaction.
      *
-     * <p>This method displays the main menu and processes user inputs to perform various actions.</p>
+     * <p>This method displays the main menu and processes user inputs to perform various actions.
      *
-     * <p>Example usage:</p>
-     * <pre>
-     * {@code
+     * <p>Example usage:
+     *
+     * <pre>{@code
      * FoodWasteApp.start();
-     * }
-     * </pre>
+     * }</pre>
      */
     public static void start() {
         Scanner scanner = new Scanner(System.in);
@@ -99,14 +103,13 @@ public class UserInterfaceService {
     /**
      * Display the main menu options to the user.
      *
-     * <p>This method prints the available actions the user can select from the console menu.</p>
+     * <p>This method prints the available actions the user can select from the console menu.
      *
-     * <p>Example usage:</p>
-     * <pre>
-     * {@code
+     * <p>Example usage:
+     *
+     * <pre>{@code
      * FoodWasteApp.displayMenu();
-     * }
-     * </pre>
+     * }</pre>
      */
     private static void displayMenu() {
         System.out.println("\n--- Food Waste Management Menu ---");
@@ -124,17 +127,15 @@ public class UserInterfaceService {
     /**
      * Add a new grocery item to the fridge.
      *
-     * <p>This method prompts the user to enter details for a new grocery item and adds it to the fridge.</p>
+     * <p>This method prompts the user to enter details for a new grocery item and adds it to the
+     * fridge.
      *
      * @param scanner Scanner object for user input
-     *
-     * <p>Example usage:</p>
-     * <pre>
-     * {@code
+     *     <p>Example usage:
+     *     <pre>{@code
      * Scanner scanner = new Scanner(System.in);
      * FoodWasteApp.addGrocery(scanner);
-     * }
-     * </pre>
+     * }</pre>
      */
     private static void addGrocery(Scanner scanner) {
         System.out.print("Enter grocery name: ");
@@ -160,17 +161,14 @@ public class UserInterfaceService {
     /**
      * Remove a grocery item from the fridge.
      *
-     * <p>This method prompts the user to enter details for removing a grocery item from the fridge.</p>
+     * <p>This method prompts the user to enter details for removing a grocery item from the fridge.
      *
      * @param scanner Scanner object for user input
-     *
-     * <p>Example usage:</p>
-     * <pre>
-     * {@code
+     *     <p>Example usage:
+     *     <pre>{@code
      * Scanner scanner = new Scanner(System.in);
      * FoodWasteApp.removeGrocery(scanner);
-     * }
-     * </pre>
+     * }</pre>
      */
     private static void removeGrocery(Scanner scanner) {
         System.out.print("Enter grocery name to remove: ");
@@ -190,37 +188,38 @@ public class UserInterfaceService {
     /**
      * View all grocery items in the fridge.
      *
-     * <p>This method displays all groceries sorted by expiry date, indicating if any are expired.</p>
+     * <p>This method displays all groceries sorted by expiry date, indicating if any are expired.
      *
-     * <p>Example usage:</p>
-     * <pre>
-     * {@code
+     * <p>Example usage:
+     *
+     * <pre>{@code
      * FoodWasteApp.viewAllGroceries();
-     * }
-     * </pre>
+     * }</pre>
      */
     private static void viewAllGroceries() {
         System.out.println("\n--- All Groceries ---");
-        fridgeService.getAllGroceries().stream().sorted(Comparator.comparing(Grocery::getExpiryDate)).forEach(x -> {
-            if (groceryService.isExpired(x)) {
-                System.out.println(x + " (expired)");
-            }else {
-                System.out.println(x);
-            }
-        });
+        fridgeService.getAllGroceries().stream()
+                .sorted(Comparator.comparing(Grocery::getExpiryDate))
+                .forEach(
+                        x -> {
+                            if (groceryService.isExpired(x)) {
+                                System.out.println(x + " (expired)");
+                            } else {
+                                System.out.println(x);
+                            }
+                        });
     }
 
     /**
      * View all expired grocery items in the fridge.
      *
-     * <p>This method displays only the groceries that have passed their expiry date.</p>
+     * <p>This method displays only the groceries that have passed their expiry date.
      *
-     * <p>Example usage:</p>
-     * <pre>
-     * {@code
+     * <p>Example usage:
+     *
+     * <pre>{@code
      * FoodWasteApp.viewExpiredGroceries();
-     * }
-     * </pre>
+     * }</pre>
      */
     private static void viewExpiredGroceries() {
         System.out.println("\n--- Expired Groceries ---");
@@ -235,14 +234,13 @@ public class UserInterfaceService {
     /**
      * Calculate the total value of all groceries in the fridge.
      *
-     * <p>This method computes and prints the total value of the groceries currently in the fridge.</p>
+     * <p>This method computes and prints the total value of the groceries currently in the fridge.
      *
-     * <p>Example usage:</p>
-     * <pre>
-     * {@code
+     * <p>Example usage:
+     *
+     * <pre>{@code
      * FoodWasteApp.calculateTotalValue();
-     * }
-     * </pre>
+     * }</pre>
      */
     private static void calculateTotalValue() {
         double totalValue = fridgeService.calculateTotalValue();
@@ -252,17 +250,15 @@ public class UserInterfaceService {
     /**
      * Add a new recipe to the recipe book.
      *
-     * <p>This method prompts the user to enter details for a new recipe and adds it to the recipe book.</p>
+     * <p>This method prompts the user to enter details for a new recipe and adds it to the recipe
+     * book.
      *
      * @param scanner Scanner object for user input
-     *
-     * <p>Example usage:</p>
-     * <pre>
-     * {@code
+     *     <p>Example usage:
+     *     <pre>{@code
      * Scanner scanner = new Scanner(System.in);
      * FoodWasteApp.addRecipe(scanner);
-     * }
-     * </pre>
+     * }</pre>
      */
     private static void addRecipe(Scanner scanner) {
         System.out.print("Enter recipe name: ");
@@ -298,14 +294,13 @@ public class UserInterfaceService {
     /**
      * View all recipes in the recipe book.
      *
-     * <p>This method displays all recipes stored in the recipe book.</p>
+     * <p>This method displays all recipes stored in the recipe book.
      *
-     * <p>Example usage:</p>
-     * <pre>
-     * {@code
+     * <p>Example usage:
+     *
+     * <pre>{@code
      * FoodWasteApp.viewAllRecipes();
-     * }
-     * </pre>
+     * }</pre>
      */
     private static void viewAllRecipes() {
         System.out.println("\n--- All Recipes ---");
@@ -315,33 +310,29 @@ public class UserInterfaceService {
     /**
      * View all possible recipes that can be made with current groceries.
      *
-     * <p>This method prompts the user to indicate whether to include expired groceries
-     * and displays recipes that can be made with the groceries available in the fridge.</p>
+     * <p>This method prompts the user to indicate whether to include expired groceries and displays
+     * recipes that can be made with the groceries available in the fridge.
      *
      * @param scanner Scanner object for user input
-     *
-     * <p>Example usage:</p>
-     * <pre>
-     * {@code
+     *     <p>Example usage:
+     *     <pre>{@code
      * Scanner scanner = new Scanner(System.in);
      * FoodWasteApp.viewPossibleRecipes(scanner);
-     * }
-     * </pre>
+     * }</pre>
      */
     private static void viewPossibleRecipes(Scanner scanner) {
-        System.out.print("Do you want to see possible recipes including expired groceries? (y/n): ");
+        System.out.print(
+                "Do you want to see possible recipes including expired groceries? (y/n): ");
         String includeExpiredGrocery = scanner.nextLine();
 
         System.out.println("\n--- Possible Recipes with Current Groceries ---");
-        List<Recipe> possibleRecipes = recipeService.getPossibleRecipes(
-                fridgeService.getAllGroceries(), includeExpiredGrocery
-        );
+        List<Recipe> possibleRecipes =
+                recipeService.getPossibleRecipes(
+                        fridgeService.getAllGroceries(), includeExpiredGrocery);
         if (possibleRecipes.isEmpty()) {
             System.out.println("No recipes can be made with the current groceries.");
         } else {
             possibleRecipes.forEach(System.out::println);
         }
     }
-
-
 }
