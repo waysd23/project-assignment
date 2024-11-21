@@ -18,6 +18,6 @@ import lombok.Data;
 @Data
 public class Cookbook {
 
-    /** A list of recipes contained in the cookbook. */
-    private List<Recipe> recipes = new ArrayList<>();
+  /** A list of recipes contained in the cookbook. */
+  private List<Recipe> recipes = new ArrayList<>();
 }

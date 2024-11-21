@@ -12,9 +12,9 @@ import lombok.Getter;
  */
 @Getter
 public class FoodStorage {
-    /**
-     * A map that holds the groceries. The key is a string representing the type of grocery, and the
-     * value is a list of Grocery objects.
-     */
-    private final Map<String, List<Grocery>> groceriesPerCategory = new HashMap<>();
+  /**
+   * A map that holds the groceries. The key is a string representing the type of grocery, and the
+   * value is a list of Grocery objects.
+   */
+  private final Map<String, List<Grocery>> groceriesPerCategory = new HashMap<>();
 }

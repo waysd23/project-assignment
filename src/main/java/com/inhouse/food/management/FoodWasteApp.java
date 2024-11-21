@@ -23,13 +23,13 @@ import com.inhouse.food.management.service.UserInterfaceService;
  */
 public class FoodWasteApp {
 
-    public static final FridgeService fridgeService = new FridgeService();
-    public static final RecipeService recipeService = new RecipeService();
-    public static final GroceryService groceryService = new GroceryService();
+  public static final FridgeService fridgeService = new FridgeService();
+  public static final RecipeService recipeService = new RecipeService();
+  public static final GroceryService groceryService = new GroceryService();
 
-    public static void main(String[] args) {
-        UserInterfaceService userInterfaceService = new UserInterfaceService();
-        init(); // Initialize sample data
-        start(); // Start the console menu
-    }
+  public static void main(String[] args) {
+    UserInterfaceService userInterfaceService = new UserInterfaceService();
+    init(); // Initialize sample data
+    start(); // Start the console menu
+  }
 }
