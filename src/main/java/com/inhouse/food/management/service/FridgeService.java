@@ -125,4 +125,17 @@ public class FridgeService {
         .mapToDouble(groceryService::calculateValue)
         .sum();
   }
+
+    /**
+     * Calculates the total value of all expired groceries stored in the fridge.
+     *
+     * @return the total value of all expired grocery items
+     */
+    public double calculateTotalValueOfExpiredGroceries() {
+        return foodStorage.getGroceriesPerCategory().values().stream()
+            .flatMap(Collection::stream)
+            .filter(groceryService::isExpired)
+            .mapToDouble(groceryService::calculateValue)
+            .sum();
+    }
 }

@@ -75,15 +75,18 @@ public class UserInterfaceService {
             calculateTotalValue();
             break;
           case 6:
-            addRecipe(scanner);
+            calculateTotalValueOfExpiredItems();
             break;
           case 7:
-            viewAllRecipes();
+            addRecipe(scanner);
             break;
           case 8:
-            viewPossibleRecipes(scanner);
+            viewAllRecipes();
             break;
           case 9:
+            viewPossibleRecipes(scanner);
+            break;
+          case 10:
             System.out.println("Exiting application. Goodbye!");
             exit = true;
             break;
@@ -111,16 +114,17 @@ public class UserInterfaceService {
    * }</pre>
    */
   private static void displayMenu() {
-    System.out.println("\n--- Food Waste Management Menu ---");
+    System.out.println("\n--- In-House Food Waste Management Menu ---");
     System.out.println("1. Add Grocery");
     System.out.println("2. Remove Grocery");
     System.out.println("3. View All Groceries");
     System.out.println("4. View Only Expired Groceries");
     System.out.println("5. Calculate Total Value of Groceries");
-    System.out.println("6. Add Recipe");
-    System.out.println("7. View All Recipes");
-    System.out.println("8. View Possible Recipes with Current Groceries");
-    System.out.println("9. Exit");
+    System.out.println("6. Calculate Total Value of Expired Groceries");
+    System.out.println("7. Add Recipe");
+    System.out.println("8. View All Recipes");
+    System.out.println("9. View Possible Recipes with Current Groceries");
+    System.out.println("10. Exit");
   }
 
   /**
@@ -246,6 +250,22 @@ public class UserInterfaceService {
     System.out.printf("Total value of groceries: NOK %.2f%n", totalValue);
   }
 
+
+    /**
+     * Calculate the total value of all expired groceries in the fridge.
+     *
+     * <p>This method computes and prints the total value of the expired groceries currently in the fridge.
+     *
+     * <p>Example usage:
+     *
+     * <pre>{@code
+     * FoodWasteApp.calculateTotalValueOfExpiredItems();
+     * }</pre>
+     */
+    private static void calculateTotalValueOfExpiredItems() {
+        double totalValue = fridgeService.calculateTotalValueOfExpiredGroceries();
+        System.out.printf("Total value of expired groceries: NOK %.2f%n", totalValue);
+    }
   /**
    * Add a new recipe to the recipe book.
    *
