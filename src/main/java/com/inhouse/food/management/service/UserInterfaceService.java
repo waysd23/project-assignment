@@ -4,6 +4,7 @@ import static com.inhouse.food.management.FoodWasteApp.*;
 
 import com.inhouse.food.management.model.Grocery;
 import com.inhouse.food.management.model.Recipe;
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -29,7 +30,7 @@ public class UserInterfaceService {
     // Add some sample recipes to the cookbook
     Map<String, Double> pancakeIngredients = Map.of("Milk", 1.5, "Eggs", 2.0, "Flour", 0.5);
     recipeService.addRecipe(
-        new Recipe(
+        new Recipe(1,
             "Pancakes",
             "Delicious breakfast",
             "Mix and cook on a skillet.",
@@ -58,42 +59,45 @@ public class UserInterfaceService {
       int choice = scanner.nextInt();
       scanner.nextLine(); // Consume newline character
       try {
-        switch (choice) {
-          case 1:
-            addGrocery(scanner);
-            break;
-          case 2:
-            removeGrocery(scanner);
-            break;
-          case 3:
-            viewAllGroceries();
-            break;
-          case 4:
-            viewExpiredGroceries();
-            break;
-          case 5:
-            calculateTotalValue();
-            break;
-          case 6:
-            calculateTotalValueOfExpiredItems();
-            break;
-          case 7:
-            addRecipe(scanner);
-            break;
-          case 8:
-            viewAllRecipes();
-            break;
-          case 9:
-            viewPossibleRecipes(scanner);
-            break;
-          case 10:
-            System.out.println("Exiting application. Goodbye!");
-            exit = true;
-            break;
-          default:
-            System.out.println("Invalid choice. Please try again.");
-            break;
-        }
+          switch (choice) {
+              case 1:
+                  addGrocery(scanner);
+                  break;
+              case 2:
+                  removeGrocery(scanner);
+                  break;
+              case 3:
+                  viewAllGroceries();
+                  break;
+              case 4:
+                  viewExpiredGroceries();
+                  break;
+              case 5:
+                  calculateTotalValue();
+                  break;
+              case 6:
+                  calculateTotalValueOfExpiredItems();
+                  break;
+              case 7:
+                  addRecipe(scanner);
+                  break;
+              case 8:
+                  viewAllRecipes();
+                  break;
+              case 9:
+                  viewPossibleRecipes(scanner);
+                  break;
+              case 10:
+                  modifySavedRecipes(scanner);
+                  break;
+              case 11:
+                  System.out.println("Exiting application. Goodbye!");
+                  exit = true;
+                  break;
+              default:
+                  System.out.println("Invalid choice. Please try again.");
+                  break;
+          }
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -102,7 +106,82 @@ public class UserInterfaceService {
     scanner.close();
   }
 
-  /**
+    private static void modifySavedRecipes(Scanner scanner)
+        throws IllegalAccessException, NoSuchFieldException {
+
+        System.out.println("Below are the saved recipes in cookbook");
+        System.out.println(Recipe.toTable(recipeService.getRecipes()));
+        System.out.print("Enter recipe id to modify: ");
+        int id = scanner.nextInt();
+        System.out.println("Below is the recipe found: ");
+        List<Recipe> foundRecipe =
+            recipeService.getRecipes().stream().filter(recipe -> recipe.getId().equals(id))
+                .toList();
+        System.out.println(Recipe.toTable(foundRecipe));
+        updateTheContentsOfRecipe(scanner, foundRecipe);
+        System.out.println("final cook book overview table post update: ");
+        System.out.println(Recipe.toTable(recipeService.getRecipes()));
+    }
+
+    private static void updateTheContentsOfRecipe(Scanner scanner, List<Recipe> foundRecipe)
+        throws NoSuchFieldException, IllegalAccessException {
+        while(true) {
+            System.out.print("Enter the column to be modified or done if no longer update required: ");
+            String columnName = scanner.next();
+            scanner.nextLine();
+
+            if (!columnName.equalsIgnoreCase("done")) {
+                Field declaredField = Recipe.class.getDeclaredField(columnName.toLowerCase());
+                declaredField.setAccessible(true); // Make the field accessible
+
+                // Get its current value
+                Object currentValue = declaredField.get(foundRecipe.get(0));
+
+                // Print the field name and its current value
+                System.out.println("\nField Name: " + columnName);
+                System.out.println("Current Value: " + currentValue);
+
+                // Ask the user if they want to update the field value
+                System.out.print("Do you want to update the value? (yes/no): ");
+                String userInput = scanner.next();
+                scanner.nextLine();
+                if (userInput.equalsIgnoreCase("yes")) {
+                    // Ask the user for the new value
+                    System.out.print("Enter the new value: ");
+                    Map<String, Double> ingredients = null;
+                    String newValue = null;
+                    if (columnName.equalsIgnoreCase("ingredients")) {
+                        ingredients = new HashMap<>();
+                        while (true) {
+                            System.out.print("Ingredient name: ");
+                            String ingredientName = scanner.nextLine();
+                            if (ingredientName.equalsIgnoreCase("done")) break;
+                            System.out.print("Quantity: ");
+                            double quantity = scanner.nextDouble();
+                            scanner.nextLine(); // Consume newline
+                            ingredients.put(ingredientName, quantity);
+                        }
+                    } else {
+                        newValue = scanner.nextLine();
+                    }
+                    // Update the field value based on its type
+                    if (declaredField.getType() == String.class) {
+                        declaredField.set(foundRecipe.get(0), newValue);
+                    } else if (declaredField.getType() == int.class) {
+                        declaredField.set(foundRecipe.get(0), Integer.parseInt(newValue));
+                    } else if (declaredField.getType() == Map.class) {
+                        declaredField.set(foundRecipe.get(0), (HashMap) (ingredients));
+                    }
+                }else{
+                    break;
+                }
+            } else{
+                break;
+            }
+        }
+    }
+
+    /**
    * Display the main menu options to the user.
    *
    * <p>This method prints the available actions the user can select from the console menu.
@@ -124,7 +203,8 @@ public class UserInterfaceService {
     System.out.println("7. Add Recipe");
     System.out.println("8. View All Recipes");
     System.out.println("9. View Possible Recipes with Current Groceries");
-    System.out.println("10. Exit");
+    System.out.println("10. Modify Saved Recipes");
+    System.out.println("11. Exit");
   }
 
   /**
@@ -306,7 +386,7 @@ public class UserInterfaceService {
     System.out.print("Serves (number of people): ");
     int serves = scanner.nextInt();
 
-    recipeService.addRecipe(new Recipe(name, description, procedure, ingredients, serves));
+    recipeService.addRecipe(new Recipe(recipeService.getRecipes().stream().mapToInt(Recipe::getId).max().orElse(0)+1,name, description, procedure, ingredients, serves));
     System.out.println("Recipe added successfully.");
   }
 
@@ -323,7 +403,8 @@ public class UserInterfaceService {
    */
   private static void viewAllRecipes() {
     System.out.println("\n--- All Recipes ---");
-    recipeService.getRecipes().forEach(System.out::println);
+    Recipe.toTable(recipeService.getRecipes());
+   // recipeService.getRecipes().forEach(System.out::println);
   }
 
   /**
@@ -349,7 +430,8 @@ public class UserInterfaceService {
     if (possibleRecipes.isEmpty()) {
       System.out.println("No recipes can be made with the current groceries.");
     } else {
-      possibleRecipes.forEach(System.out::println);
+        Recipe.toTable(possibleRecipes);
+      //possibleRecipes.forEach(System.out::println);
     }
   }
 }

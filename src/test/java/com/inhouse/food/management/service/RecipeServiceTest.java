@@ -18,7 +18,7 @@ public class RecipeServiceTest {
     RecipeService recipeService = new RecipeService();
 
     Recipe recipe =
-        new Recipe("Home Recipe", "Recipe", "mix the ingredients", Map.of("Milk", 1.0), 2);
+        new Recipe(1, "Home Recipe", "Recipe", "mix the ingredients", Map.of("Milk", 1.0), 2);
 
     recipeService.addRecipe(recipe);
 
@@ -33,8 +33,8 @@ public class RecipeServiceTest {
     RecipeService recipeService = new RecipeService();
 
     Recipe recipe1 =
-        new Recipe("Home Recipe", "Recipe", "mix the ingredients", Map.of("Milk", 1.0), 2);
-    Recipe recipe2 = new Recipe("Home Recipe2", "Bread", "Crumbs", Map.of("Milk", 1.0), 2);
+        new Recipe(1, "Home Recipe", "Recipe", "mix the ingredients", Map.of("Milk", 1.0), 2);
+    Recipe recipe2 = new Recipe(2, "Home Recipe2", "Bread", "Crumbs", Map.of("Milk", 1.0), 2);
 
     recipeService.addRecipe(recipe1);
     recipeService.addRecipe(recipe2);
@@ -57,8 +57,8 @@ public class RecipeServiceTest {
     List<Grocery> fridgeItems = Arrays.asList(milk, bread);
 
     Recipe recipe1 =
-        new Recipe("Home Recipe", "Recipe", "mix the ingredients", Map.of("Milk", 1.0), 2);
-    Recipe recipe2 = new Recipe("Home Recipe2", "Bread", "mix the crumbs", Map.of("Milk", 1.0), 2);
+        new Recipe(1, "Home Recipe", "Recipe", "mix the ingredients", Map.of("Milk", 1.0), 2);
+    Recipe recipe2 = new Recipe(2, "Home Recipe2", "Bread", "mix the crumbs", Map.of("Milk", 1.0), 2);
     recipeService.addRecipe(recipe1);
     recipeService.addRecipe(recipe2);
 
@@ -99,9 +99,9 @@ public class RecipeServiceTest {
     List<Grocery> fridgeItems = Arrays.asList(milk, bread);
 
     Recipe recipe1 =
-        new Recipe("Home Recipe", "Recipe", "mix the ingredients", Map.of("Milk", 1.0), 2);
+        new Recipe(1,"Home Recipe", "Recipe", "mix the ingredients", Map.of("Milk", 1.0), 2);
     Recipe recipe2 =
-        new Recipe("Home Recipe2", "Crumbs", "mix the ingredients", Map.of("Milk", 1.0), 2);
+        new Recipe(2, "Home Recipe2", "Crumbs", "mix the ingredients", Map.of("Milk", 1.0), 2);
     recipeService.addRecipe(recipe1);
     recipeService.addRecipe(recipe2);
 
